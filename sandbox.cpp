@@ -1,70 +1,104 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node {
+struct node {
     int data;
-    struct Node* left;
-    struct Node* right;
-};
+    struct node *next;
+} *head, *current, *tail, *before;
 
-struct Node* newNode(int data) {
-    struct Node* node = (struct Node*) malloc(sizeof(struct Node));
-    node->data = data;
-    node->left = NULL;
-    node->right = NULL;
+void insert_first(int element) {
+    current = (struct node*)malloc(sizeof(struct node));
+    current->data = element;
 
-    return node;
+    if (head == NULL) {
+        current->next = NULL;
+        tail = current;
+    } else {
+        current->next = head;
+    }
+    head = current;
 }
 
-struct Node* insert(struct Node* node, int data) {
-    if (node == NULL)
-        return newNode(data);
-    if (data < node->data)
-        node->left = insert(node->left, data);
-    else if (data > node->data)
-        node->right = insert(node->right, data);
-    return node;
+void insert_end(int element) {
+    current = (struct node*)malloc(sizeof(struct node));
+    current->data = element;
+    current->next = NULL;
+
+    if (head == NULL) {
+        head = current;
+    } else {
+        tail->next = current;
+    }
+    tail = current;
 }
 
-void inOrder(struct Node* root) {
-    if (root == NULL)
-        return;
-    inOrder(root->left);
-    printf("%d ", root->data);
-    inOrder(root->right);
+int delete_first() {
+    if (head == NULL) {
+        return 0;
+    }
+    if (head == tail) {
+        int temp = tail->data;
+        head = NULL;
+        tail = NULL;
+        return temp;
+    } else {
+        current = head;
+        int temp = current->data;
+        head = current->next;
+        return temp;
+    }
 }
 
-void preOrder (struct Node* root) {
-  if (root == NULL)
-    return;
-  printf("%d ", root->data);
-  preOrder(root->left);
-  preOrder(root->right);
+int delete_last() {
+    if (head == NULL) {
+        return 0;
+    }
+    if (head == tail) {
+        int temp = tail->data;
+        head = NULL;
+        tail = NULL;
+        return temp;
+    } else {
+        int temp = tail->data;
+        current = head;
+        while (current->next != NULL) {
+            before = current;
+            current = current->next;
+        }
+        before->next = NULL;
+        tail = before;
+        return temp;
+    }
 }
 
-void postOrder (struct Node* root) {
-  if (root == NULL)
-    return;
-  preOrder(root->left);
-  preOrder(root->right);
-  printf("%d ", root->data);
+void display () {
+    current = head;
+
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
 }
 
 int main() {
-    struct Node* root = NULL;
-    root = insert(root, 50);
-    insert(root, 30);
-    insert(root, 20);
-    insert(root, 40);
-    insert(root, 70);
-    insert(root, 60);
-    insert(root, 80);
-    
-    inOrder(root);
-    printf("\n");
-    preOrder(root);
-    printf("\n");
-    postOrder(root);
-
-    return 0;
+    int temp = delete_last();
+    printf("%d\n", temp);
+    temp = delete_first();
+    printf("%d\n", temp);
+    insert_end(10);
+    insert_first(10);
+    insert_end(30);
+    insert_first(100);
+    insert_first(20);
+    temp = delete_last();
+    printf("%d", temp);
+    insert_end(500);
+    temp = delete_last();
+    printf("%d", temp);
+    insert_end(500);
+    insert_end(300);
+    insert_first(25);
+    temp = delete_last();
+    printf("%d", temp);
+    display();
 }
