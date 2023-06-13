@@ -1,0 +1,1 @@
+This repository was created for the sole purpose of providing the owner with much-needed version control. The owner has a habit of changing the code too much and closing the editor, only to realize that they haven't created a copy of the original code. As a result, the code prior to the changes that have been committed is lost, and it can be a hassle to recreate it.
