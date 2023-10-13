@@ -1,15 +1,18 @@
-DATA SEGMENT USE16
-MESG DB 'Hello word','$'
-DATA ENDS
-CODE SEGMENT USE16
-    ASSUME CS:CODE,DS:DATA
-BEG:
-    MOV AX,DATA
-    MOV DS,AX
-    MOV AH,9
-    MOV DX, OFFSET MESG
-    INT 21H
-    MOV AH,4CH
-    INT 21H;back to dos
-CODE ENDS
-END BEG
+global _start
+
+section .text
+
+_start:
+    MOV rax, 1
+    MOV rdi, 1
+    MOV rsi, msg
+    MOV rdx, msglen
+    SYSCALL
+
+    MOV rax, 60
+    MOV rdi, 0
+    SYSCALL
+
+section .data
+    msg: DB "Hello World", 0xA
+    msglen: EQU $ - msg
